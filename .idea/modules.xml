@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/suara_bumi.iml" filepath="$PROJECT_DIR$/suara_bumi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/suara_bumi_android.iml" filepath="$PROJECT_DIR$/android/suara_bumi_android.iml" />
+    </modules>
+  </component>
+</project>
