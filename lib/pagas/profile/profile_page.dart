@@ -156,7 +156,7 @@ class ProfilePage extends StatelessWidget {
   backgroundColor: const Color(0xFF1B3022),
   selectedItemColor: Colors.white,
   unselectedItemColor: Colors.white60,
-  currentIndex: 4, // Tetap 4 karena ini halaman Profil
+  currentIndex: 4,
   
   onTap: (newIndex) {
       if (newIndex == 0) Navigator.pushReplacementNamed(context, '/setor_utama');
@@ -177,7 +177,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Widget-widget pembantu
   Widget _buildMiniStatCard(String val, String label, IconData icon, Color color) {
     return Expanded(
       child: Container(

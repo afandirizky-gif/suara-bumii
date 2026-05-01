@@ -11,7 +11,6 @@ class RewardRiwayatPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF1B3022)),
           onPressed: () {
-            // Kita paksa balik ke Reward Utama
             Navigator.pushReplacementNamed(context, '/reward_tukar_page');
           },
         ),
@@ -25,7 +24,6 @@ class RewardRiwayatPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             // Panggil _buildPointHeader() dan _buildTabBar() yang sama
              const Text("Maret 2025", style: TextStyle(fontWeight: FontWeight.bold)),
              _buildHistoryItem("Tukar 500 poin ke Gopay", "-500", "29 Mar", isRed: true),
              _buildHistoryItem("Bonus Referral dari Ahmad", "+200", "29 Mar", isRed: false),
@@ -38,7 +36,7 @@ class RewardRiwayatPage extends StatelessWidget {
       bottomNavigationBar: _buildBottomNav(context, 3),
     );
   }
-  // Copy dari sini min
+  
   Widget _buildBottomNav(BuildContext context, int index) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,

@@ -13,7 +13,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Profil & Nama
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -25,7 +24,7 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        "Putra Pratama", // Nama dari desain
+                        "Putra Pratama", 
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -43,8 +42,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-
-              // Streak Badge
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -74,16 +71,10 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Tombol Scan Sampah dengan AI
               _buildScanBanner(context),
               const SizedBox(height: 20),
-
-              // Card Total Poin
               _buildPointCard(),
               const SizedBox(height: 15),
-
-              // Row CO2 & Jumlah Setor
               Row(
                 children: [
                   _buildStatCard("CO2 Bulan Ini", "8.3 kg dicegah"),
@@ -92,8 +83,6 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 25),
-
-              // Aktivitas Setor (Grafik Placeholder)
               const Text(
                 "Aktivitas Setor",
                 style: TextStyle(
@@ -105,12 +94,9 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 12),
               _buildActivityGraph(),
               const SizedBox(height: 20),
-
-              // Tombol-Tombol Aksi Utama
               _buildMainActionButtons(),
               const SizedBox(height: 25),
 
-              // Challenge Aktif
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -144,8 +130,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color(0xFF1B3022),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white60,
-        currentIndex: 2, // Index 2 biasanya untuk Home
-        // TAMBAHKAN LOGIKA INI MIN (SUDAH RAPI):
+        currentIndex: 2, 
         onTap: (index) {
           switch (index) {
             case 0:
@@ -179,17 +164,16 @@ class HomePage extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.emoji_events_outlined),
             label: "Reward",
-          ), // <--- Index 3
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: "Profile",
-          ), // <--- Index 4
+          ),
         ],
       ),
     );
   }
 
-  // PASTIKAN HANYA ADA SATU INI DI BAGIAN BAWAH (SEBELUM KURUNG TUTUP CLASS)
   Widget _buildScanBanner(BuildContext context) {
     return GestureDetector(
       onTap: () {

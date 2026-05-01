@@ -11,10 +11,10 @@ class ChallengeTersediaPage extends StatelessWidget {
         title: const Text(
           "Challenge",
           style: TextStyle(
-            fontFamily: 'Serif', 
-            fontSize: 28, 
-            fontWeight: FontWeight.bold, 
-            color: Color(0xFF1B3022)
+            fontFamily: 'Serif',
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1B3022),
           ),
         ),
         centerTitle: true,
@@ -26,11 +26,8 @@ class ChallengeTersediaPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Tab Bar - Tersedia Aktif (Index 1)
             _buildTabBar(context, 1),
             const SizedBox(height: 20),
-
-            // Banner Unggulan (Tersedia)
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -40,41 +37,71 @@ class ChallengeTersediaPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("🔥 Challenge Unggulan", style: TextStyle(color: Colors.white, fontSize: 10)),
-                  const Text("Pilah 10 kg Minggu Ini", 
-                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)
+                  const Text(
+                    "🔥 Challenge Unggulan",
+                    style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
-                  const Text("128 orang bergabung • Berakhir dalam 2 hari", 
-                    style: TextStyle(color: Colors.white70, fontSize: 10)
+                  const Text(
+                    "Pilah 10 kg Minggu Ini",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    "128 orang bergabung • Berakhir dalam 2 hari",
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
                   ),
                   const SizedBox(height: 15),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: const LinearProgressIndicator(
-                      value: 0.6, 
-                      backgroundColor: Colors.white24, 
-                      color: Colors.green
+                      value: 0.6,
+                      backgroundColor: Colors.white24,
+                      color: Colors.green,
                     ),
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white, 
+                      backgroundColor: Colors.white,
                       foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    child: const Text("Buat Sekarang", style: TextStyle(fontWeight: FontWeight.bold)),
-                  )
+                    child: const Text(
+                      "Buat Sekarang",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 25),
-
-            // Daftar Challenge Tersedia
-            _buildChallengeItem("Bike to Work", "Use bicycle for commute", "2/5", "5 days", "+ 400 pts"),
-            _buildChallengeItem("Bike to Work", "Use bicycle for commute", "2/5", "5 days", "+ 400 pts"),
-            _buildChallengeItem("Bike to Work", "Use bicycle for commute", "2/5", "5 days", "+ 400 pts"),
+            _buildChallengeItem(
+              "Bike to Work",
+              "Use bicycle for commute",
+              "2/5",
+              "5 days",
+              "+ 400 pts",
+            ),
+            _buildChallengeItem(
+              "Bike to Work",
+              "Use bicycle for commute",
+              "2/5",
+              "5 days",
+              "+ 400 pts",
+            ),
+            _buildChallengeItem(
+              "Bike to Work",
+              "Use bicycle for commute",
+              "2/5",
+              "5 days",
+              "+ 400 pts",
+            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -83,7 +110,6 @@ class ChallengeTersediaPage extends StatelessWidget {
     );
   }
 
-  // Widget Helper Tab Bar
   Widget _buildTabBar(BuildContext context, int index) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -95,7 +121,12 @@ class ChallengeTersediaPage extends StatelessWidget {
     );
   }
 
-  Widget _tabItem(BuildContext context, String label, bool isActive, String route) {
+  Widget _tabItem(
+    BuildContext context,
+    String label,
+    bool isActive,
+    String route,
+  ) {
     return GestureDetector(
       onTap: () => Navigator.pushReplacementNamed(context, route),
       child: Container(
@@ -104,35 +135,72 @@ class ChallengeTersediaPage extends StatelessWidget {
           color: isActive ? const Color(0xFF1B3022) : const Color(0xFF6DA472),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildChallengeItem(String title, String sub, String progress, String days, String pts) {
+  Widget _buildChallengeItem(
+    String title,
+    String sub,
+    String progress,
+    String days,
+    String pts,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Row(
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(sub, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  sub,
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
                 const SizedBox(height: 8),
-                Text("$days  $pts", style: const TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
+                Text(
+                  "$days  $pts",
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(color: Color(0xFFE8F3E9), shape: BoxShape.circle),
-            child: Text(progress, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+            decoration: const BoxDecoration(
+              color: Color(0xFFE8F3E9),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              progress,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
           ),
-          const Icon(Icons.chevron_right, color: Colors.grey)
+          const Icon(Icons.chevron_right, color: Colors.grey),
         ],
       ),
     );
@@ -147,16 +215,30 @@ class ChallengeTersediaPage extends StatelessWidget {
       currentIndex: index, // Index 1 untuk Challenge
       onTap: (newIndex) {
         if (newIndex == 2) Navigator.pushReplacementNamed(context, '/home');
-        if (newIndex == 3) Navigator.pushReplacementNamed(context, '/reward_tukar');
+        if (newIndex == 3)
+          Navigator.pushReplacementNamed(context, '/reward_tukar');
         if (newIndex == 4) Navigator.pushReplacementNamed(context, '/profile');
-        if (newIndex == 1) Navigator.pushReplacementNamed(context, '/challenge_aktif');
+        if (newIndex == 1)
+          Navigator.pushReplacementNamed(context, '/challenge_aktif');
       },
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.eco_outlined), label: "Deposit"),
-        BottomNavigationBarItem(icon: Icon(Icons.track_changes), label: "Challenge"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.eco_outlined),
+          label: "Deposit",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.track_changes),
+          label: "Challenge",
+        ),
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.emoji_events_outlined), label: "Reward"),
-        BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Profile"),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.emoji_events_outlined),
+          label: "Reward",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          label: "Profile",
+        ),
       ],
     );
   }

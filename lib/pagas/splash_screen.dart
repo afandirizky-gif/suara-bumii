@@ -7,13 +7,11 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F1E6), // Warna krem sesuai gambar
+      backgroundColor: const Color(0xFFF2F1E6),
       body: SafeArea(
         child: Column(
           children: [
             const Spacer(),
-
-            // Logo Daun (Sudah diperbaiki strukturnya)
             Center(
               child: Container(
                 padding: const EdgeInsets.all(40),
@@ -22,7 +20,7 @@ class SplashScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
-                  Icons.eco, // Pakai eco biar aman
+                  Icons.eco,
                   size: 80,
                   color: Colors.white,
                 ),
@@ -30,8 +28,6 @@ class SplashScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 30),
-
-            // Nama Aplikasi
             const Text(
               "Suara Bumi",
               style: TextStyle(
@@ -40,8 +36,6 @@ class SplashScreen extends StatelessWidget {
                 color: Color(0xFF1B3022),
               ),
             ),
-
-            // Deskripsi
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               child: Text(
@@ -52,8 +46,6 @@ class SplashScreen extends StatelessWidget {
             ),
 
             const Spacer(),
-
-            // Tombol Navigasi
             TextButton(
               onPressed: () {
                 Navigator.push(

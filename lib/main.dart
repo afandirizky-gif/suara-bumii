@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-// Import semua halaman dari folder pagas
+import 'package:suara_bumi/pagas/auth/register_page.dart';
 import 'pagas/splash_screen.dart';
-import 'pagas/login_page.dart'; // <--- Pastikan ini sudah di-import
-import 'pagas/auth/register_page.dart';
+import 'pagas/login_page.dart';
 import 'pagas/auth/otp_page.dart';
-import 'pagas/profile_setup_page.dart';
+import 'pagas/profile/profile_setup_page.dart';
 import 'pagas/onboarding/onboarding_one.dart';
 import 'pagas/onboarding/onboarding_two.dart';
 import 'pagas/onboarding/onboarding_three.dart';
 import 'pagas/home_page.dart';
 import 'pagas/scan_sampah_page.dart';
-import 'pagas/profile_page.dart';
-import 'pagas/reward_referral_page.dart';
-import 'pagas/reward_riwayat_page.dart';
-import 'pagas/reward_tukar_page.dart';
+import 'pagas/profile/profile_page.dart';
+import 'pagas/reward/reward_referral_page.dart';
+import 'pagas/reward/reward_riwayat_page.dart';
+import 'pagas/reward/reward_tukar_page.dart';
 import 'pagas/challenge/challenge_aktif_page.dart';
 import 'pagas/challenge/challenge_tersedia_page.dart';
 import 'pagas/challenge/challenge_selesai_page.dart';
-import 'pagas/setor_utama_page.dart';
-import 'pagas/setor_jemput_page.dart';
-import 'pagas/setor_drop_point_page.dart';
+import 'pagas/setor/setor_utama_page.dart';
+import 'pagas/setor/setor_jemput_page.dart';
+import 'pagas/setor/setor_drop_point_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,25 +33,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Suara Bumi',
       theme: ThemeData(
-        // Menggunakan colorScheme agar lebih modern di Flutter terbaru
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF4F6D52),
           primary: const Color(0xFF1B3022),
         ),
-        useMaterial3: true, // Biar tampilan tombol & input lebih kekinian
+        useMaterial3: true,
         fontFamily: 'Inter',
       ),
-
-      // Halaman awal tetap Splash Screen
       home: const SplashScreen(),
 
-      // Peta jalan (Navigasi) aplikasi kamu
       routes: {
-        '/login': (context) => const LoginPage(), // Alamat Login
-        '/register': (context) => const RegisterPage(), // Alamat Daftar
-        '/otp': (context) => const OtpPage(), // Alamat Verifikasi OTP
-        '/profile_setup': (context) =>
-            const ProfileSetupPage(), // Alamat Lengkapi Profil
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/otp': (context) => const OtpPage(),
+        '/profile_setup': (context) => const ProfileSetupPage(),
         '/onboarding_one': (context) => const OnboardingOne(),
         '/onboarding_two': (context) => const OnboardingTwo(),
         '/onboarding_three': (context) => const OnboardingThree(),

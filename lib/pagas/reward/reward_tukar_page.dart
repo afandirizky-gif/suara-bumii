@@ -73,7 +73,6 @@ class RewardTukarPage extends StatelessWidget {
     );
   }
 
-  // Widget Helper Header Poin (Sama untuk semua halaman Reward)
   Widget _buildPointHeader() {
     return Column(
       children: [
@@ -120,7 +119,7 @@ class RewardTukarPage extends StatelessWidget {
       ),
     );
   }
-// Copy dari sini min
+  
    Widget _buildBottomNav(BuildContext context, int index) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,

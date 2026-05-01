@@ -73,8 +73,11 @@ class RewardReferralPage extends StatelessWidget {
           Navigator.pushReplacementNamed(context, '/profile');
         } else if (newIndex == 3) {
           Navigator.pushReplacementNamed(context, '/reward_tukar');
+        } else if (newIndex == 1) {
+          Navigator.pushReplacementNamed(context, '/challenge_aktif');
+        } else if (newIndex == 0) {
+          Navigator.pushReplacementNamed(context, '/setor_utama');
         }
-        // Tambahkan rute lain jika sudah ada
       },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.eco_outlined), label: "Deposit"),

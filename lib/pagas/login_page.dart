@@ -134,7 +134,7 @@ class LoginPage extends StatelessWidget {
               ],
             ),
             
-            const SizedBox(height: 40), // Spasi sebelum tulisan Daftar
+            const SizedBox(height: 40),
 
             Center(
               child: Row(

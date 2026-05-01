@@ -26,7 +26,7 @@ class OnboardingThree extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  'https://picsum.photos/302/400', // Ganti dengan asset gambarmu
+                  'https://picsum.photos/302/400',
                   height: 300, width: double.infinity, fit: BoxFit.cover,
                 ),
               ),

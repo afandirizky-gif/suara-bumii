@@ -21,7 +21,6 @@ class SetorJemputPage extends StatelessWidget {
             _buildScheduleItem("Senin, 31 Maret"),
             _buildScheduleItem("Senin, 31 Maret"),
             const SizedBox(height: 25),
-            // RECENT DEPOSITS LAGI (Sesuai Gambar 3)
             const Row(children: [Icon(Icons.calendar_today_outlined, size: 16), SizedBox(width: 8), Text("Recent Deposits", style: TextStyle(fontWeight: FontWeight.bold))]),
             const SizedBox(height: 15),
             _buildStatRowSimulasi(),

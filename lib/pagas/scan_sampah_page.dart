@@ -20,7 +20,6 @@ class ScanSampahPage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Area Kamera / Preview Gambar
             Container(
               height: 300,
               width: double.infinity,
@@ -33,7 +32,6 @@ class ScanSampahPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-              // Ganti bagian Row ini di dalam body:
                   Row(
                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -97,8 +95,6 @@ class ScanSampahPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Cara Penanganan
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -122,10 +118,7 @@ class ScanSampahPage extends StatelessWidget {
                   _buildStep(1, "Kosongkan dan bilas botol dari sisa cairan"),
                   _buildStep(2, "Lepaskan label dan tutup botol (pisahkan)"),
                   _buildStep(3, "Remas botol untuk menghemat ruang"),
-                  _buildStep(
-                    4,
-                    "Masukkan ke tempat sampah anorganik atau drop point terdekat",
-                  ),
+                  _buildStep(4,"Masukkan ke tempat sampah anorganik atau drop point terdekat"),
                 ],
               ),
             ),
@@ -168,8 +161,6 @@ class ScanSampahPage extends StatelessWidget {
       ), // Index 0 untuk Deposit/Scan
     );
   }
-
-  // Widget-widget Helper
   Widget _buildCategoryTab(IconData icon, String label, bool isActive) {
     return Container(
       width: 100,

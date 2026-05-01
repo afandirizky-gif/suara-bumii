@@ -7,7 +7,6 @@ class ProfileSetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Tombol Back di AppBar untuk balik ke OTP jika ada yang salah
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 20),
           onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false),
@@ -24,8 +23,7 @@ class ProfileSetupPage extends StatelessWidget {
           children: [
             const Text("Bantu kami personalisasi pengalamanmu"),
             const SizedBox(height: 32),
-            
-            // Bagian Foto Profil
+    
             Stack(
               children: [
                 CircleAvatar(
@@ -47,8 +45,6 @@ class ProfileSetupPage extends StatelessWidget {
             const SizedBox(height: 8),
             const Text("Tap untuk ubah foto", style: TextStyle(fontSize: 12, color: Colors.grey)),
             const SizedBox(height: 32),
-            
-            // Dropdown & Input Fields
             _buildDropdownField("Tanggal Lahir"),
             _buildDropdownField("Domisili"),
             _buildDropdownField("Jenis Kelamin"),
@@ -56,7 +52,6 @@ class ProfileSetupPage extends StatelessWidget {
             
             const SizedBox(height: 16),
             
-            // Box Informasi Poin
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -78,8 +73,7 @@ class ProfileSetupPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            
-            // TOMBOL SIMPAN (Perbaikan di Sini)
+           
             SizedBox(
               width: double.infinity,
               height: 55,
@@ -89,10 +83,7 @@ class ProfileSetupPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
                 ),
                 onPressed: () {
-                  // Aksi setelah simpan: balik ke Login dan hapus history navigasi
-                  Navigator.pushReplacementNamed(context, '/onboarding_one');
-                  
-                  // Munculkan notifikasi sukses
+                Navigator.pushReplacementNamed(context, '/onboarding_one');
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Profil berhasil disimpan! Silakan masuk."))
                   );
@@ -108,8 +99,6 @@ class ProfileSetupPage extends StatelessWidget {
       ),
     );
   }
-
-  // Widget Helper untuk Dropdown
   Widget _buildDropdownField(String label) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -125,7 +114,7 @@ class ProfileSetupPage extends StatelessWidget {
               child: DropdownButton<String>(
                 isExpanded: true, 
                 hint: const Text("Pilih"), 
-                items: const [], // Nanti bisa diisi ['Laki-laki', 'Perempuan'] dsb.
+                items: const [],
                 onChanged: (val) {}
               ),
             ),
@@ -134,8 +123,6 @@ class ProfileSetupPage extends StatelessWidget {
       ),
     );
   }
-
-  // Widget Helper untuk TextField
   Widget _buildTextField(String label, String hint) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
