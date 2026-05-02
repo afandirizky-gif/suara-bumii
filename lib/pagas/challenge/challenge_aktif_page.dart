@@ -117,6 +117,7 @@ class ChallengeAktifPage extends StatelessWidget {
       ],
     );
   }
+
   Widget _tabItem(
     BuildContext context,
     String label,
@@ -229,14 +230,21 @@ class ChallengeAktifPage extends StatelessWidget {
       unselectedItemColor: Colors.white60,
       currentIndex: index,
       onTap: (newIndex) {
-        if (newIndex == 2) Navigator.pushReplacementNamed(context, '/home');
-        if (newIndex == 3)
-          Navigator.pushReplacementNamed(context, '/reward_tukar');
-        if (newIndex == 4) Navigator.pushReplacementNamed(context, '/profile');
-        if (newIndex == 1)
-          Navigator.pushReplacementNamed(context, '/challenge_aktif');
-        if (newIndex == 0)
+        if (newIndex == 0) {
           Navigator.pushReplacementNamed(context, '/setor_utama');
+        }
+        if (newIndex == 1) {
+          Navigator.pushReplacementNamed(context, '/challenge_aktif');
+        }
+        if (newIndex == 2) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+        if (newIndex == 3) {
+          Navigator.pushReplacementNamed(context, '/reward_tukar');
+        }
+        if (newIndex == 4) {
+          Navigator.pushReplacementNamed(context, '/profile');
+        }
       },
       items: const [
         BottomNavigationBarItem(
