@@ -12,44 +12,35 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
-            
-            // --- BAGIAN LOGO YANG DIUBAH ---
             Center(
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: 120, // Sesuaikan ukuran lebar logo
-                height: 120, // Sesuaikan ukuran tinggi logo
-                fit: BoxFit.contain,
+              child: Container(
+                width: 250,
+                height: 250,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF2F1E6),
+                ),
+                child: Image.asset(
+                  'assets/images/logo figma.png',
+                  width: 220,
+                  height: 120,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-
-            const SizedBox(height: 30),
-            
-            // Judul Aplikasi
-            const Text(
-              "DAURI",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1B3022),
-              ),
-            ),
-            
-            // Deskripsi Aplikasi
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               child: Text(
                 "Pilah sampah lebih mudah, dapat reward nyata, dan lihat dampakmu bagi bumi.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFF1B3022), 
+                  color: Color.fromARGB(255, 9, 56, 25),
                   fontSize: 14,
                 ),
               ),
             ),
 
             const Spacer(),
-            
+
             // Tombol Lanjut
             TextButton(
               onPressed: () {
@@ -68,11 +59,7 @@ class SplashScreen extends StatelessWidget {
                     style: TextStyle(color: Color(0xFF1B3022)),
                   ),
                   SizedBox(width: 5),
-                  Icon(
-                    Icons.arrow_forward, 
-                    size: 18, 
-                    color: Color(0xFF1B3022),
-                  ),
+                  Icon(Icons.arrow_forward, size: 18, color: Color(0xFF1B3022)),
                 ],
               ),
             ),
@@ -81,10 +68,7 @@ class SplashScreen extends StatelessWidget {
             // Versi Aplikasi
             const Text(
               "v1.0.0",
-              style: TextStyle(
-                color: Colors.grey, 
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 12),
             ),
             const SizedBox(height: 10),
           ],
@@ -92,4 +76,4 @@ class SplashScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
