@@ -12,40 +12,45 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
+            
+            // --- BAGIAN LOGO YANG DIUBAH ---
             Center(
-              child: Container(
-                padding: const EdgeInsets.all(40),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF6B9B78),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.eco,
-                  size: 80,
-                  color: Colors.white,
-                ),
+              child: Image.asset(
+                'assets/images/logo.png',
+                width: 120, // Sesuaikan ukuran lebar logo
+                height: 120, // Sesuaikan ukuran tinggi logo
+                fit: BoxFit.contain,
               ),
             ),
 
             const SizedBox(height: 30),
+            
+            // Judul Aplikasi
             const Text(
-              "Suara Bumi",
+              "DAURI",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1B3022),
               ),
             ),
+            
+            // Deskripsi Aplikasi
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               child: Text(
                 "Pilah sampah lebih mudah, dapat reward nyata, dan lihat dampakmu bagi bumi.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF1B3022), fontSize: 14),
+                style: TextStyle(
+                  color: Color(0xFF1B3022), 
+                  fontSize: 14,
+                ),
               ),
             ),
 
             const Spacer(),
+            
+            // Tombol Lanjut
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -63,17 +68,23 @@ class SplashScreen extends StatelessWidget {
                     style: TextStyle(color: Color(0xFF1B3022)),
                   ),
                   SizedBox(width: 5),
-                  Icon(Icons.arrow_forward, size: 18, color: Color(0xFF1B3022)),
+                  Icon(
+                    Icons.arrow_forward, 
+                    size: 18, 
+                    color: Color(0xFF1B3022),
+                  ),
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
 
-            // Versi
+            // Versi Aplikasi
             const Text(
               "v1.0.0",
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(
+                color: Colors.grey, 
+                fontSize: 12,
+              ),
             ),
             const SizedBox(height: 10),
           ],
@@ -81,4 +92,4 @@ class SplashScreen extends StatelessWidget {
       ),
     );
   }
-}
+} 
