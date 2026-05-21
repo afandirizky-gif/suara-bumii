@@ -9,9 +9,12 @@ class ProfileSetupPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 20),
-          onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false),
+          onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Lengkapi Profile", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Lengkapi Profile",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -23,41 +26,54 @@ class ProfileSetupPage extends StatelessWidget {
           children: [
             const Text("Bantu kami personalisasi pengalamanmu"),
             const SizedBox(height: 32),
-    
+
             Stack(
               children: [
                 CircleAvatar(
-                  radius: 60, 
-                  backgroundColor: Colors.grey.shade200, 
-                  child: const Text("R", style: TextStyle(fontSize: 40, color: Colors.grey))
+                  radius: 60,
+                  backgroundColor: Colors.grey.shade200,
+                  child: const Text(
+                    "R",
+                    style: TextStyle(fontSize: 40, color: Colors.grey),
+                  ),
                 ),
                 Positioned(
-                  bottom: 0, 
-                  right: 0, 
+                  bottom: 0,
+                  right: 0,
                   child: CircleAvatar(
-                    radius: 18, 
-                    backgroundColor: const Color(0xFF4F6D52), 
-                    child: const Icon(Icons.camera_alt_outlined, size: 18, color: Colors.white)
-                  )
+                    radius: 18,
+                    backgroundColor: const Color(0xFF4F6D52),
+                    child: const Icon(
+                      Icons.camera_alt_outlined,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            const Text("Tap untuk ubah foto", style: TextStyle(fontSize: 12, color: Colors.grey)),
+            const Text(
+              "Tap untuk ubah foto",
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
             const SizedBox(height: 32),
             _buildDropdownField("Tanggal Lahir"),
             _buildDropdownField("Domisili"),
             _buildDropdownField("Jenis Kelamin"),
-            _buildTextField("Kode referral (tidak wajib di isi)", "Dapat kode dari teman?"),
-            
+            _buildTextField(
+              "Kode referral (tidak wajib di isi)",
+              "Dapat kode dari teman?",
+            ),
+
             const SizedBox(height: 16),
-            
+
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF1F4F1), 
+                color: const Color(0xFFF1F4F1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFDDE6DD))
+                border: Border.all(color: const Color(0xFFDDE6DD)),
               ),
               child: const Row(
                 children: [
@@ -65,32 +81,44 @@ class ProfileSetupPage extends StatelessWidget {
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Profil lengkap = +50 poin selamat datang 🎉", 
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF1B3022))
-                    )
+                      "Profil lengkap = +50 poin selamat datang 🎉",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1B3022),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 32),
-           
+
             SizedBox(
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1B3022), 
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
+                  backgroundColor: const Color(0xFF1B3022),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 onPressed: () {
-                Navigator.pushReplacementNamed(context, '/onboarding_one');
+                  Navigator.pushReplacementNamed(context, '/onboarding_one');
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Profil berhasil disimpan! Silakan masuk."))
+                    const SnackBar(
+                      content: Text("Profil berhasil disimpan! Silakan masuk."),
+                    ),
                   );
                 },
                 child: const Text(
-                  "Simpan Profil", 
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)
+                  "Simpan Profil",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -99,6 +127,7 @@ class ProfileSetupPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildDropdownField(String label) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -109,13 +138,16 @@ class ProfileSetupPage extends StatelessWidget {
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(color: const Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                isExpanded: true, 
-                hint: const Text("Pilih"), 
+                isExpanded: true,
+                hint: const Text("Pilih"),
                 items: const [],
-                onChanged: (val) {}
+                onChanged: (val) {},
               ),
             ),
           ),
@@ -123,6 +155,7 @@ class ProfileSetupPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildTextField(String label, String hint) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -133,11 +166,14 @@ class ProfileSetupPage extends StatelessWidget {
           const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
-              hintText: hint, 
-              filled: true, 
-              fillColor: const Color(0xFFF5F5F5), 
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none)
-            )
+              hintText: hint,
+              filled: true,
+              fillColor: const Color(0xFFF5F5F5),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+            ),
           ),
         ],
       ),

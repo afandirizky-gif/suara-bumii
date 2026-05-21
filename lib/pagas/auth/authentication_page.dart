@@ -14,35 +14,32 @@ class AuthenticationPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(40),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF6B9B78),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.eco_outlined,
-                  size: 80,
-                  color: Colors.white,
-                ),
+              Image.asset(
+                'assets/images/logo figma.png',
+                width: 310,
+                fit: BoxFit.contain,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const Text(
                 "Mulai Perjalanan\nHijau-mu",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B3022),
+                  color: Color(0xFF14521E),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               const Text(
                 "Pilah sampah lebih mudah, dapat reward nyata, dan lihat dampakmu bagi bumi.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF1B3022)),
+                style: TextStyle(
+                  color: Color(0xFF1B3022),
+                  fontSize: 16,
+                  height: 1.5,
+                ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 46),
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -67,11 +64,11 @@ class AuthenticationPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               const Text.rich(
                 TextSpan(
                   text: "Dengan mendaftar, kamu menyetujui ",
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
                   children: [
                     TextSpan(
                       text: "Syarat & Ketentuan",

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _obscurePassword = true;
+  bool _rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +24,7 @@ class LoginPage extends StatelessWidget {
             const Text(
               "Selamat Datang\nKembali",
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1B3022),
               ),
@@ -27,7 +35,7 @@ class LoginPage extends StatelessWidget {
               style: TextStyle(color: Colors.black54),
             ),
             const SizedBox(height: 40),
-            
+
             const Text(
               "Email atau No. HP",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -45,19 +53,46 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            
+
             const Text(
               "Password",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             TextField(
-              obscureText: true,
+              obscureText: _obscurePassword,
               decoration: InputDecoration(
                 hintText: "Masukkan Password",
-                suffixIcon: const Icon(Icons.visibility_outlined),
                 filled: true,
                 fillColor: Colors.white.withOpacity(0.5),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.black54,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12.0),
+                      child: Text(
+                        _obscurePassword ? 'Tutup' : 'Lihat',
+                        style: const TextStyle(
+                          color: Color(0xFF1B3022),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
@@ -65,24 +100,41 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            
-            const Row(
+
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.check_box_outline_blank, size: 20),
-                    Text(" Ingat saya"),
+                    Checkbox(
+                      value: _rememberMe,
+                      activeColor: const Color(0xFF1B3022),
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberMe = value ?? false;
+                        });
+                      },
+                    ),
+                    const Text(
+                      "Ingat saya",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
                   ],
                 ),
-                Text(
-                  "Lupa password?",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Lupa password?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1B3022),
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 30),
-            
+
             SizedBox(
               width: double.infinity,
               height: 55,
@@ -94,7 +146,11 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/home',
+                    (route) => false,
+                  );
                 },
                 child: const Text(
                   "Masuk",
@@ -103,7 +159,7 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25),
-            
+
             const Row(
               children: [
                 Expanded(child: Divider()),
@@ -115,7 +171,7 @@ class LoginPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 25),
-            
+
             Row(
               children: [
                 Expanded(
@@ -133,7 +189,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 40),
 
             Center(
@@ -148,7 +204,7 @@ class LoginPage extends StatelessWidget {
                     child: const Text(
                       "Daftar gratis",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold, 
+                        fontWeight: FontWeight.bold,
                         color: Color(0xFF4F6D52),
                       ),
                     ),
