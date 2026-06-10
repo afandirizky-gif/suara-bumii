@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
+import '../services/deposit_service.dart';
 
-class SetorUtamaPage extends StatelessWidget {
+class SetorUtamaPage extends StatefulWidget {
   const SetorUtamaPage({super.key});
+
+  @override
+  State<SetorUtamaPage> createState() => _SetorUtamaPageState();
+}
+
+class _SetorUtamaPageState extends State<SetorUtamaPage> {
+  List<dynamic> _recentDeposits = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final data = await depositService.getHistory();
+      if (mounted) setState(() { _recentDeposits = data.take(3).toList(); _isLoading = false; });
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,25 +44,17 @@ class SetorUtamaPage extends StatelessWidget {
             const SizedBox(height: 25),
             Row(
               children: [
-                _buildMethodCard(
-                  context,
-                  "Jemput",
-                  Icons.inventory_2_outlined,
-                  '/setor_jemput',
-                ),
+                _buildMethodCard(context, "Jemput", Icons.inventory_2_outlined, '/setor_jemput'),
                 const SizedBox(width: 15),
-                _buildMethodCard(
-                  context,
-                  "Drop Point",
-                  Icons.location_on_outlined,
-                  '/setor_drop_point',
-                ),
+                _buildMethodCard(context, "Drop Point", Icons.location_on_outlined, '/setor_drop_point'),
               ],
             ),
             const SizedBox(height: 35),
             _buildRecentDepositsHeader(),
             const SizedBox(height: 15),
-            _buildStatRow(),
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _buildRecentList(),
             const SizedBox(height: 40),
             const Center(
               child: Text(
@@ -53,16 +69,57 @@ class SetorUtamaPage extends StatelessWidget {
     );
   }
 
+  Widget _buildRecentList() {
+    if (_recentDeposits.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Text("Belum ada riwayat setor", style: TextStyle(color: Colors.grey)),
+        ),
+      );
+    }
+
+    return Row(
+      children: _recentDeposits.map((d) {
+        final weight = d['totalWeightKg'] ?? 0;
+        final status = d['status'] ?? 'pending';
+        final type = d['type'] ?? 'drop_point';
+        final createdAt = d['createdAt']?.toString() ?? '';
+        final dateStr = createdAt.length >= 10 ? createdAt.substring(0, 10) : createdAt;
+
+        Color col;
+        if (type == 'pickup') {
+          col = Colors.orange;
+        } else {
+          col = Colors.blue;
+        }
+
+        return Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(type == 'pickup' ? 'Jemput' : 'Drop Off',
+                    style: TextStyle(color: col, fontWeight: FontWeight.bold, fontSize: 10)),
+                Text("$weight kg", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(status, style: const TextStyle(color: Colors.grey, fontSize: 9)),
+                Text(dateStr, style: const TextStyle(color: Colors.grey, fontSize: 8)),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: const Text(
         "Setor Sampah",
-        style: TextStyle(
-          fontFamily: 'Serif',
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF1B3022),
-          fontSize: 26,
-        ),
+        style: TextStyle(fontFamily: 'Serif', fontWeight: FontWeight.bold, color: Color(0xFF1B3022), fontSize: 26),
       ),
       centerTitle: true,
       backgroundColor: Colors.transparent,
@@ -70,32 +127,18 @@ class SetorUtamaPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMethodCard(
-    BuildContext context,
-    String title,
-    IconData icon,
-    String route,
-  ) {
+  Widget _buildMethodCard(BuildContext context, String title, IconData icon, String route) {
     return Expanded(
       child: GestureDetector(
         onTap: () => Navigator.pushNamed(context, route),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 35),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: Column(
             children: [
               Icon(icon, size: 40, color: const Color(0xFF1B3022)),
               const SizedBox(height: 12),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ],
           ),
         ),
@@ -104,61 +147,12 @@ class SetorUtamaPage extends StatelessWidget {
   }
 
   Widget _buildRecentDepositsHeader() {
-    return Row(
+    return const Row(
       children: [
-        const Icon(
-          Icons.calendar_today_outlined,
-          size: 18,
-          color: Color(0xFF1B3022),
-        ),
-        const SizedBox(width: 8),
-        const Text(
-          "Recent Deposits",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
+        Icon(Icons.calendar_today_outlined, size: 18, color: Color(0xFF1B3022)),
+        SizedBox(width: 8),
+        Text("Recent Deposits", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
       ],
-    );
-  }
-
-  Widget _buildStatRow() {
-    return Row(
-      children: [
-        _buildStatCard("Plastic", "2.5 kg", "Today", Colors.blue),
-        const SizedBox(width: 10),
-        _buildStatCard("Paper", "3.2 kg", "Yesterday", Colors.orange),
-        const SizedBox(width: 10),
-        _buildStatCard("Metal", "1.8 kg", "2 Days ago", Colors.grey),
-      ],
-    );
-  }
-
-  Widget _buildStatCard(String label, String val, String date, Color col) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: col,
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
-              ),
-            ),
-            Text(
-              val,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            Text(date, style: const TextStyle(color: Colors.grey, fontSize: 9)),
-          ],
-        ),
-      ),
     );
   }
 
@@ -170,7 +164,6 @@ class SetorUtamaPage extends StatelessWidget {
       unselectedItemColor: Colors.white60,
       currentIndex: index,
       onTap: (newIndex) {
-        // Jangan lupa tambahin navigasinya min biar bisa diklik!
         if (newIndex == 0) Navigator.pushReplacementNamed(context, '/setor_utama');
         if (newIndex == 1) Navigator.pushReplacementNamed(context, '/challenge_aktif');
         if (newIndex == 2) Navigator.pushReplacementNamed(context, '/home');

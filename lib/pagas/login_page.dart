@@ -1,10 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
+import '../services/api_client.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _rememberMe = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showSnackbar("Email dan password harus diisi");
+      return;
+    }
+
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.login(email, password);
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      _showSnackbar(e.message);
+    } catch (e) {
+      if (!mounted) return;
+      _showSnackbar("Gagal terhubung ke server. Pastikan backend berjalan.");
+    }
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red.shade700,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F1E6),
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
@@ -34,10 +90,12 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "Masukkan Email / no",
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.5),
+                fillColor: Colors.white.withValues(alpha: 0.5),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
@@ -52,12 +110,24 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextField(
-              obscureText: true,
+              controller: _passwordController,
+              obscureText: _obscurePassword,
               decoration: InputDecoration(
                 hintText: "Masukkan Password",
-                suffixIcon: const Icon(Icons.visibility_outlined),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.5),
+                fillColor: Colors.white.withValues(alpha: 0.5),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
@@ -66,16 +136,28 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.check_box_outline_blank, size: 20),
-                    Text(" Ingat saya"),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _rememberMe = !_rememberMe;
+                        });
+                      },
+                      child: Icon(
+                        _rememberMe
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                        size: 20,
+                      ),
+                    ),
+                    const Text(" Ingat saya"),
                   ],
                 ),
-                Text(
+                const Text(
                   "Lupa password?",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -93,13 +175,20 @@ class LoginPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
-                child: const Text(
-                  "Masuk",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
+                onPressed: authProvider.isLoading ? null : _handleLogin,
+                child: authProvider.isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        "Masuk",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
               ),
             ),
             const SizedBox(height: 25),

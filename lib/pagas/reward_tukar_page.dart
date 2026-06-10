@@ -1,97 +1,145 @@
 import 'package:flutter/material.dart';
+import '../services/reward_service.dart';
+import '../services/api_client.dart';
 
-class RewardTukarPage extends StatelessWidget {
+class RewardTukarPage extends StatefulWidget {
   const RewardTukarPage({super.key});
 
   @override
+  State<RewardTukarPage> createState() => _RewardTukarPageState();
+}
+
+class _RewardTukarPageState extends State<RewardTukarPage> {
+  Map<String, dynamic>? _balance;
+  bool _isLoading = true;
+  bool _isRedeeming = false;
+  String _selectedPlatform = 'gopay';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBalance();
+  }
+
+  Future<void> _loadBalance() async {
+    try {
+      final data = await rewardService.getBalance();
+      if (mounted) setState(() { _balance = data; _isLoading = false; });
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _handleRedeem(int amountRp) async {
+    setState(() => _isRedeeming = true);
+    try {
+      await rewardService.redeem(platform: _selectedPlatform, amountRp: amountRp);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Penukaran sedang diproses!"), backgroundColor: Colors.green),
+      );
+      _loadBalance(); // Refresh balance
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), backgroundColor: Colors.red.shade700),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Gagal menukar poin"), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _isRedeeming = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final available = _balance?['available'] ?? 0;
+    final nextReward = _balance?['nextReward'] as Map<String, dynamic>?;
+    final progressPercent = nextReward?['progressPercent'] ?? 0;
+    final pointsNeeded = nextReward?['pointsNeeded'] ?? 0;
+    final nextAmountRp = nextReward?['nextAmountRp'] ?? 0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F1E6),
-     appBar: AppBar(
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Color(0xFF1B3022)),
-        onPressed: () {
-      Navigator.pushReplacementNamed(context, '/home');
-      },
-   ),
-  title: const Text("Tukar Reward", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1B3022))),
-  centerTitle: true,
-  backgroundColor: Colors.transparent,
-  elevation: 0,
-),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _buildPointHeader(),
-            const SizedBox(height: 20),
-            _buildTabBar(context, 0),
-            const SizedBox(height: 20),
-            
-            // Input Jumlah Poin
-            Container(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B3022)),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+        ),
+        title: const Text("Tukar Reward", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1B3022))),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Masukkan Jumlah Poin", style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 12),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "0",
-                      filled: true,
-                      fillColor: const Color(0xFFF5F5F5),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                    ),
-                  ),
+                  _buildPointHeader(available, progressPercent, pointsNeeded, nextAmountRp),
                   const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1B3022), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/reward_riwayat_page');
-                        Navigator.pushReplacementNamed(context, '/reward_referral_page');
-                      },
-                      child: const Text("Tukar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    ),
+                  _buildTabBar(context, 0),
+                  const SizedBox(height: 20),
+                  // Pilihan E-Wallet (tap to select)
+                  _buildWalletOption("Gopay", "Transfer ke Gopay", "G", 'gopay'),
+                  _buildWalletOption("Ovo", "Transfer ke Ovo", "O", 'ovo'),
+                  _buildWalletOption("Dana", "Transfer ke Dana", "D", 'dana'),
+                  const SizedBox(height: 20),
+                  // Redeem buttons
+                  const Text("Pilih Nominal", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [5000, 10000, 25000, 50000].map((amount) {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width / 2 - 30,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1B3022),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          onPressed: _isRedeeming ? null : () => _handleRedeem(amount),
+                          child: Text("Rp ${_formatNumber(amount)}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            
-            // Pilihan E-Wallet
-            _buildWalletOption("Gopay", "Transfer ke Gopay", "G"),
-            _buildWalletOption("Ovo", "Transfer ke Ovo", "O"),
-            _buildWalletOption("Dana", "Transfer ke Dana", "D"),
-          ],
-        ),
-      ),
       bottomNavigationBar: _buildBottomNav(context, 3),
     );
   }
 
-  // Widget Helper Header Poin (Sama untuk semua halaman Reward)
-  Widget _buildPointHeader() {
+  String _formatNumber(int n) {
+    return n.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
+  }
+
+  Widget _buildPointHeader(int available, int progressPercent, int pointsNeeded, int nextAmountRp) {
     return Column(
       children: [
         const Icon(Icons.circle, color: Colors.orange, size: 50),
-        const Text("2,450", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+        Text("$available", style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
         const Text("Total Poin", style: TextStyle(color: Colors.grey)),
         const SizedBox(height: 15),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-          child: Column(
-            children: [
-              const Text("Butuh 550 poin lagi untuk reward Rp 25.000", style: TextStyle(fontSize: 12)),
-              const SizedBox(height: 8),
-              LinearProgressIndicator(value: 0.7, backgroundColor: Colors.grey.shade200, color: Colors.green),
-            ],
+        if (nextAmountRp > 0)
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                Text("Butuh $pointsNeeded poin lagi untuk reward Rp ${_formatNumber(nextAmountRp)}", style: const TextStyle(fontSize: 12)),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(value: progressPercent / 100, backgroundColor: Colors.grey.shade200, color: Colors.green),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
@@ -100,9 +148,9 @@ class RewardTukarPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _tabItem(context, "Aktif", index == 0, '/reward_tukar'),
-        _tabItem(context, "Tersedia", index == 1, '/reward_riwayat'),
-        _tabItem(context, "Selesai", index == 2, '/reward_referral'),
+        _tabItem(context, "Tukar", index == 0, '/reward_tukar'),
+        _tabItem(context, "Riwayat", index == 1, '/reward_riwayat'),
+        _tabItem(context, "Referral", index == 2, '/reward_referral'),
       ],
     );
   }
@@ -120,8 +168,8 @@ class RewardTukarPage extends StatelessWidget {
       ),
     );
   }
-// Copy dari sini min
-   Widget _buildBottomNav(BuildContext context, int index) {
+
+  Widget _buildBottomNav(BuildContext context, int index) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: const Color(0xFF1B3022),
@@ -144,15 +192,27 @@ class RewardTukarPage extends StatelessWidget {
       ],
     );
   }
-  Widget _buildWalletOption(String name, String sub, String initial) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.grey.shade100, child: Text(initial, style: const TextStyle(color: Colors.black))),
-        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(sub, style: const TextStyle(fontSize: 12)),
-        trailing: const Icon(Icons.chevron_right),
+
+  Widget _buildWalletOption(String name, String sub, String initial, String platform) {
+    final isSelected = _selectedPlatform == platform;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedPlatform = platform),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: isSelected ? Border.all(color: const Color(0xFF4F6D52), width: 2) : null,
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: isSelected ? const Color(0xFF4F6D52) : Colors.grey.shade100,
+            child: Text(initial, style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+          ),
+          title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(sub, style: const TextStyle(fontSize: 12)),
+          trailing: isSelected ? const Icon(Icons.check_circle, color: Color(0xFF4F6D52)) : const Icon(Icons.chevron_right),
+        ),
       ),
     );
   }

@@ -1,8 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import 'auth/authentication_page.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
+
+  Future<void> _checkAuth() async {
+    // Small delay for splash branding
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final loggedIn = await authProvider.tryAutoLogin();
+
+    if (!mounted) return;
+
+    if (loggedIn) {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+    // If not logged in, stay on splash screen and let user tap to continue
+  }
 
   @override
   Widget build(BuildContext context) {

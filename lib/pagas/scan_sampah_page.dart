@@ -179,7 +179,7 @@ class ScanSampahPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: isActive ? Border.all(color: Colors.black12, width: 2) : null,
         boxShadow: isActive
-            ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)]
+            ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)]
             : null,
       ),
       child: Column(
@@ -250,10 +250,12 @@ class ScanSampahPage extends StatelessWidget {
       currentIndex: index,
       onTap: (newIndex) {
         if (newIndex == 2) Navigator.pushReplacementNamed(context, '/home');
-        if (newIndex == 1)
+        if (newIndex == 1) {
           Navigator.pushReplacementNamed(context, '/challenge_aktif');
-        if (newIndex == 3)
+        }
+        if (newIndex == 3) {
           Navigator.pushReplacementNamed(context, '/reward_tukar');
+        }
         if (newIndex == 4) Navigator.pushReplacementNamed(context, '/profile');
       },
       items: const [

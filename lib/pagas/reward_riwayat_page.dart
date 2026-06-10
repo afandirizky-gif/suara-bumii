@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
+import '../services/reward_service.dart';
 
-class RewardRiwayatPage extends StatelessWidget {
+class RewardRiwayatPage extends StatefulWidget {
   const RewardRiwayatPage({super.key});
+
+  @override
+  State<RewardRiwayatPage> createState() => _RewardRiwayatPageState();
+}
+
+class _RewardRiwayatPageState extends State<RewardRiwayatPage> {
+  List<dynamic> _history = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    try {
+      final data = await rewardService.getHistory();
+      if (mounted) setState(() { _history = data; _isLoading = false; });
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,35 +34,94 @@ class RewardRiwayatPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF1B3022)),
-          onPressed: () {
-            // Kita paksa balik ke Reward Utama
-            Navigator.pushReplacementNamed(context, '/reward_tukar_page');
-          },
+          onPressed: () => Navigator.pushReplacementNamed(context, '/reward_tukar'),
         ),
         title: const Text("Riwayat Reward", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1B3022))),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-             // Panggil _buildPointHeader() dan _buildTabBar() yang sama
-             const Text("Maret 2025", style: TextStyle(fontWeight: FontWeight.bold)),
-             _buildHistoryItem("Tukar 500 poin ke Gopay", "-500", "29 Mar", isRed: true),
-             _buildHistoryItem("Bonus Referral dari Ahmad", "+200", "29 Mar", isRed: false),
-             const SizedBox(height: 20),
-             const Text("Februari 2025", style: TextStyle(fontWeight: FontWeight.bold)),
-             _buildHistoryItem("Tukar 300 poin ke Ovo", "-300", "29 Feb", isRed: true),
-          ],
-        ),
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTabBar(context, 1),
+                  const SizedBox(height: 20),
+                  if (_history.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40),
+                        child: Text("Belum ada riwayat", style: TextStyle(color: Colors.grey)),
+                      ),
+                    ),
+                  ..._history.map((item) {
+                    final amount = item['amount'] as num? ?? 0;
+                    final type = item['type'] ?? '';
+                    final description = item['description'] ?? type;
+                    final createdAt = item['createdAt'] ?? '';
+                    final dateStr = createdAt.toString().length >= 10
+                        ? createdAt.toString().substring(0, 10)
+                        : createdAt.toString();
+                    final isNegative = amount < 0;
+
+                    return _buildHistoryItem(
+                      description,
+                      "${isNegative ? '' : '+'}$amount",
+                      dateStr,
+                      isRed: isNegative,
+                    );
+                  }),
+                ],
+              ),
+            ),
       bottomNavigationBar: _buildBottomNav(context, 3),
     );
   }
-  // Copy dari sini min
+
+  Widget _buildTabBar(BuildContext context, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _tabItem(context, "Tukar", index == 0, '/reward_tukar'),
+        _tabItem(context, "Riwayat", index == 1, '/reward_riwayat'),
+        _tabItem(context, "Referral", index == 2, '/reward_referral'),
+      ],
+    );
+  }
+
+  Widget _tabItem(BuildContext context, String label, bool isActive, String route) {
+    return GestureDetector(
+      onTap: () => Navigator.pushReplacementNamed(context, route),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF3D5543) : const Color(0xFF6DA472),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget _buildHistoryItem(String title, String point, String date, {bool isRed = false}) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(title, style: const TextStyle(fontSize: 14)),
+      subtitle: const Text("Berhasil", style: TextStyle(fontSize: 12, color: Colors.grey)),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(point, style: TextStyle(fontWeight: FontWeight.bold, color: isRed ? Colors.red : Colors.green)),
+          Text(date, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBottomNav(BuildContext context, int index) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -63,19 +146,3 @@ class RewardRiwayatPage extends StatelessWidget {
     );
   }
 }
-
-  Widget _buildHistoryItem(String title, String point, String date, {bool isRed = false}) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(title, style: const TextStyle(fontSize: 14)),
-      subtitle: const Text("Berhasil", style: TextStyle(fontSize: 12, color: Colors.grey)),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(point, style: TextStyle(fontWeight: FontWeight.bold, color: isRed ? Colors.red : Colors.green)),
-          Text(date, style: const TextStyle(fontSize: 10, color: Colors.grey)),
-        ],
-      ),
-    );
-  }
